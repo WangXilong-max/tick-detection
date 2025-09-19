@@ -37,7 +37,7 @@ app.add_middleware(
 async def detect_tick(file: UploadFile = File(...)):
     try:
         if not file.content_type.startswith("image/"):
-            raise HTTPException(status_code=400, detail="请上传图片文件")
+            raise HTTPException(status_code=400, detail="Please upload an image file")
 
         img_bytes = await file.read()
         img_base64 = base64.b64encode(img_bytes).decode("utf-8")
@@ -52,7 +52,7 @@ async def detect_tick(file: UploadFile = File(...)):
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "用最快速度,做最简短的回答.判断这图片是不是蜱虫，只允许回答'是'或'不是'或'不确定'"},
+                        {"type": "text", "text": "Please provide a quick and brief response. Is this image a tick? Only answer with 'Yes', 'No', or 'Uncertain'"},
                         {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_base64}"}}
                     ]
                 }
