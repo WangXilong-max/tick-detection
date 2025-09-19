@@ -75,19 +75,23 @@ export function TickIdentificationPage({ onNavigate, onModalStateChange }: TickI
       console.log('Detection result:', detectionResult);
       
       // Check if tick is detected based on the response
-      // API returns: "这是xx蜱虫" (tick detected) or "不是,这是xxx" (no tick)
-      const isTickDetected = !detectionResult.includes('不是');
-      
-      if (isTickDetected) {
+      // API returns: "Yes" (tick detected), "No" (not a tick), or "Uncertain"
+      if (detectionResult === "Yes") {
         // Tick detected
         setDetectionCount(1);
         setConfidence(85); // Set a default confidence for ChatGPT detection
         setShowDetectionResult(true);
         onModalStateChange?.(false);
-      } else {
+      } else if (detectionResult === "No") {
         // No tick detected
         setDetectionCount(0);
         setConfidence(0);
+        setShowDetectionResult(true);
+        onModalStateChange?.(false);
+      } else {
+        // Uncertain
+        setDetectionCount(0);
+        setConfidence(50); // Set medium confidence for uncertain cases
         setShowDetectionResult(true);
         onModalStateChange?.(false);
       }
